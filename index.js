@@ -1,26 +1,54 @@
-
 let myLeads = []
 
 const inputBtn = document.querySelector("#input-btn")
+const deleteBtn = document.querySelector("#delete-btn")
+
 const inputEl = document.querySelector("#input-el")
 const ulEl = document.querySelector("#ul-el")
 
-const renderLeads = value => ulEl.innerHTML += `<li>
-                                                    <a href='${value}' target='_blank'>${value}</a>
-                                                </li>`;
+const myLeadsInLocalStorage = JSON.parse( localStorage.getItem("leads") )
 
-
-const saveLead = () => {
-    if (inputEl.value === ""){
-        return
-    }
-    myLeads.push(inputEl.value);
-    // const li = document.createElement("li")
-    // li.textContent = inputEl.value;
-    // ulEl.append(li)  
-    renderLeads(inputEl.value)
-    inputEl.value = "";
+if (myLeadsInLocalStorage){
+    myLeads = myLeadsInLocalStorage;
+    renderLeads(myLeads)
 }
 
-inputBtn.addEventListener("click", saveLead)
 
+const renderLeads = leads => {
+    let listItems = ""
+    for (let i = 0; i < leads.length; i++) {
+        listItems += `
+            <li>
+                <a target='_blank' href='${leads[i]}'>
+                    ${leads[i]}
+                </a>
+            </li>
+        `
+    }
+    ulEl.innerHTML = listItems  
+}
+
+const inputIsBlank = () => {
+    if (inputEl.value === ""){
+        return true
+    }
+    return false;
+}
+
+inputBtn.addEventListener("click", function(){
+    if (inputIsBlank()) {alert("can't empty"); return}
+
+    myLeads.push(inputEl.value);
+    renderLeads(myLeads) 
+
+    let temp_str_leads = JSON.stringify(myLeads)
+    localStorage.setItem("leads", temp_str_leads)
+
+    inputEl.value = "";
+})
+
+deleteBtn.addEventListener("dblclick", function(){
+    localStorage.clear()
+    myLeads = []
+    renderLeads(myLeads)
+})
