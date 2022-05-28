@@ -8,11 +8,6 @@ const ulEl = document.querySelector("#ul-el")
 
 const myLeadsInLocalStorage = JSON.parse( localStorage.getItem("leads") )
 
-if (myLeadsInLocalStorage){
-    myLeads = myLeadsInLocalStorage;
-    renderLeads(myLeads)
-}
-
 
 const renderLeads = leads => {
     let listItems = ""
@@ -33,6 +28,12 @@ const inputIsBlank = () => {
         return true
     }
     return false;
+}
+
+
+if (myLeadsInLocalStorage){
+    myLeads = myLeadsInLocalStorage;
+    renderLeads(myLeads)
 }
 
 inputBtn.addEventListener("click", function(){
